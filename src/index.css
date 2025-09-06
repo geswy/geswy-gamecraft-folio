@@ -106,6 +106,41 @@
   .primary-gradient {
     background: var(--gradient-primary);
   }
+
+  /* Mouse Follower Effects */
+  .mouse-cursor {
+    @apply hidden;
+  }
+  
+  .mouse-follower {
+    @apply hidden;
+  }
+  
+  @media (hover: hover) {
+    .mouse-cursor {
+      @apply block;
+    }
+    
+    .mouse-follower {
+      @apply block;
+    }
+  }
+  
+  .cursor-link {
+    transform: scale(1.5) !important;
+    @apply bg-primary/80;
+  }
+  
+  .follower-link {
+    transform: scale(2) !important;
+    @apply border-primary border-2 opacity-80;
+  }
+
+  /* Enhanced hover effects */
+  .game-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-intense);
+  }
 }
 
 @layer utilities {

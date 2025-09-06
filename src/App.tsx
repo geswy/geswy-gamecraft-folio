@@ -6,6 +6,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import GamePage from "./components/GamePage";
 import NotFound from "./pages/NotFound";
+import News from "./pages/News";
+import Streams from "./pages/Streams";
+import Events from "./pages/Events";
+import Navigation from "./components/Navigation";
+import MouseFollower from "./components/MouseFollower";
 
 const queryClient = new QueryClient();
 
@@ -15,8 +20,13 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <Navigation />
+        <MouseFollower />
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/streams" element={<Streams />} />
+          <Route path="/events" element={<Events />} />
           <Route path="/game/:gameId" element={<GamePage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, Coins, TrendingUp, Users, Star } from 'lucide-react';
+import { ArrowLeft, Coins, TrendingUp, Users, Star, ShoppingCart, Plus, Minus } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 
 // Import game backgrounds
@@ -11,6 +11,70 @@ import fifaBg from '@/assets/fifa-bg.jpg';
 import fortniteBg from '@/assets/fortnite-bg.jpg';
 import codBg from '@/assets/cod-bg.jpg';
 import rocketLeagueBg from '@/assets/rocket-league-bg.jpg';
+
+// Enhanced Coin Card Component
+const CoinCard = ({ coin, gameTitle }: { coin: any, gameTitle: string }) => {
+  const [quantity, setQuantity] = React.useState(1);
+
+  return (
+    <div className="p-6 border-r border-border/50 last:border-r-0 hover:bg-secondary/20 transition-all duration-300">
+      <div className="text-center mb-4">
+        <div className="text-4xl mb-3">{coin.icon}</div>
+        <h3 className="text-xl font-bold mb-2">{coin.name}</h3>
+        <p className="text-muted-foreground text-sm mb-4">{coin.description}</p>
+        <Badge variant="secondary" className="text-lg px-4 py-2 bg-primary/10 text-primary border-primary/20">
+          {coin.price}
+        </Badge>
+      </div>
+      
+      <div className="space-y-3">
+        <div className="flex items-center justify-center gap-3">
+          <Button 
+            size="sm" 
+            variant="outline" 
+            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+            className="h-8 w-8 p-0"
+          >
+            <Minus className="h-3 w-3" />
+          </Button>
+          <span className="font-semibold w-8 text-center">{quantity}</span>
+          <Button 
+            size="sm" 
+            variant="outline" 
+            onClick={() => setQuantity(quantity + 1)}
+            className="h-8 w-8 p-0"
+          >
+            <Plus className="h-3 w-3" />
+          </Button>
+        </div>
+        
+        <Button className="w-full bg-gradient-primary hover:shadow-glow">
+          Add to Cart
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+// Purchase Card Component
+const PurchaseCard = ({ coin }: { coin: any }) => {
+  return (
+    <Card className="hover:shadow-glow transition-all duration-300 group cursor-pointer">
+      <CardContent className="p-4">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="text-2xl">{coin.icon}</div>
+          <div>
+            <h4 className="font-semibold">{coin.name}</h4>
+            <p className="text-sm text-muted-foreground">{coin.price}</p>
+          </div>
+        </div>
+        <Button size="sm" className="w-full group-hover:bg-primary/90">
+          Quick Buy
+        </Button>
+      </CardContent>
+    </Card>
+  );
+};
 
 const gameData = {
   fifa: {
@@ -81,7 +145,7 @@ const GamePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pt-16">
       {/* Header */}
       <div className="relative h-80 overflow-hidden">
         <img 
@@ -138,38 +202,41 @@ const GamePage = () => {
           </Card>
         </div>
 
-        {/* Currency System */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-2xl">
-              <Coins className="h-6 w-6 text-primary" />
-              In-Game Currency System
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <div className="space-y-6">
-              {game.coins.map((coin, index) => (
-                <div key={index}>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-4">
-                      <div className="text-3xl">{coin.icon}</div>
-                      <div>
-                        <h3 className="text-xl font-semibold">{coin.name}</h3>
-                        <p className="text-muted-foreground">{coin.description}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <Badge variant="outline" className="text-lg px-4 py-2">
-                        {coin.price}
-                      </Badge>
-                    </div>
-                  </div>
-                  {index < game.coins.length - 1 && <Separator />}
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        {/* Enhanced Shopping System */}
+        <div className="space-y-8">
+          <Card className="overflow-hidden">
+            <CardHeader className="bg-gradient-primary text-primary-foreground">
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                <Coins className="h-6 w-6" />
+                In-Game Currency & Shopping System
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
+                {game.coins.map((coin, index) => (
+                  <CoinCard key={index} coin={coin} gameTitle={game.title} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Shopping Cart Preview */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ShoppingCart className="h-5 w-5 text-primary" />
+                Quick Purchase Options
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {game.coins.map((coin, index) => (
+                  <PurchaseCard key={index} coin={coin} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
